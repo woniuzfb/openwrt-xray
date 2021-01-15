@@ -1,0 +1,31 @@
+# action.yml
+name: 'build openwrt-xray'
+description: 'build xray with openwrt docker container action'
+inputs:
+  compress-goproxy:
+    description: 'Compiling with GOPROXY proxy'
+    required: false
+    default: 'n'
+  exclude-assets:
+    description: 'Exclude geoip.dat & geosite.dat'
+    required: false
+    default: 'n'
+  compress-upx:
+    description: 'Compress executable files with UPX'
+    required: false
+    default: 'y'
+  compatibility-mode:
+    description: 'V2ray Compatibility mode(v2ray soft connection Xray)'
+    required: false
+    default: 'n'
+outputs:
+  date:
+    description: 'openwrt-xray build date'
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.compress-goproxy }}
+    - ${{ inputs.exclude-assets }}
+    - ${{ inputs.compress-upx }}
+    - ${{ inputs.compatibility-mode }}

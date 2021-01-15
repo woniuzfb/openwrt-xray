@@ -1,0 +1,39 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+jobs:
+  build_release:
+    runs-on: ubuntu-latest
+    name: Build openwrt-xray
+    steps:
+      - name: Build aarch64_generic
+        env:
+          WORKSPACE: ${{ github.workspace }}
+        uses: woniuzfb/openwrt-xray/.github/targets/aarch64_generic@v1
+        with:
+          compress-goproxy: 'n'
+          exclude-assets: 'n'
+          compress-upx: 'y'
+          compatibility-mode: 'n'
+      - name: Build aarch64_cortex-a53
+        env:
+          WORKSPACE: ${{ github.workspace }}
+        uses: woniuzfb/openwrt-xray/.github/targets/aarch64_cortex-a53@v1
+        id: last_build
+        with:
+          compress-goproxy: 'n'
+          exclude-assets: 'n'
+          compress-upx: 'y'
+          compatibility-mode: 'n'
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: '*.ipk'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Done
+        run: echo "Build complete - ${{ steps.last_build.outputs.date }}"

@@ -10,6 +10,15 @@ jobs:
     runs-on: ubuntu-latest
     name: Build openwrt-xray
     steps:
+      - name: Build for aarch64_cortex-a53
+        env:
+          WORKSPACE: ${{ github.workspace }}
+        uses: woniuzfb/openwrt-xray/.github/targets/aarch64_cortex-a53@v1
+        with:
+          compress-goproxy: 'n'
+          exclude-assets: 'n'
+          compress-upx: 'y'
+          compatibility-mode: 'n'
       - name: Build for aarch64_generic
         env:
           WORKSPACE: ${{ github.workspace }}
